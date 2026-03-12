@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP - Nosso Casamento</title>
+    <style>
+        body { font-family: 'Georgia', serif; background-color: #fdfaf6; color: #5a5a5a; text-align: center; padding: 20px; }
+        .card { background: white; max-width: 500px; margin: 0 auto; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e0d5c1; }
+        h2 { color: #6E8B3D; }
+        .input-group { text-align: left; margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { background-color: #6E8B3D; color: white; border: none; padding: 15px 20px; width: 100%; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background-color: #556B2F; }
+        #sucesso { display: none; color: green; font-weight: bold; margin-top: 20px; }
+        
+        .countdown-container {
+            text-align: center;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            max-width: 500px;
+            margin: 15px auto;
+            border: 1px solid #6E8B3D;
+        }
+
+        .countdown-title {
+            font-family: 'Georgia', serif;
+            color: #6E8B3D;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .timer {
+            display: flex;
+            justify-content: space-around;
+            justify-content: center;
+        }
+
+        .time-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .number {
+            font-family: 'Georgia', serif;
+            font-size: 2rem;
+            color: #4a4a4a;
+        }
+
+        .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #6E8B3D;
+            letter-spacing: 0.5px;
+            top:1px;
+        }
+        
+        .dois-ponto {
+            font-family: 'Georgia', serif;
+            font-size: 1.5rem;
+            color: #4a4a4a;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Casamento João Victor & Sirlan</h2>
+    
+    <div id="form-container">
+        <form id="meuForm">
+            <p>Por favor, confirme sua presença até o dia 20 de Agosto.</p>
+            <div class="input-group">
+                <label>Nome Completo</label>
+                <input type="text" name="nome" placeholder="Seu Nome Completo" required>
+            </div>
+
+            <div class="input-group">
+                    <label>Você comparecerá?</label>
+                    <select id="status" name="presenca" required>
+                        <option value="Sim">Sim, com certeza!</option>
+                        <option value="Não">Infelizmente não poderei ir</option>
+                    </select>
+            </div>
+
+            <button type="submit" id="btnEnviar">Enviar Confirmação</button>
+        </form>
+    </div>
+    
+
+    <div id="msg-sim" style="display:none;">
+        <h2 style="color: #b08d4a;">✨ Uhul! Mal podemos esperar!</h2>
+        <p>Sua presença está confirmada. Prepare o coração!</p>
+        
+        <div class="countdown-container">
+    <div class="countdown-title">Faltam apenas...</div>
+    <div class="timer">
+        <div class="time-block">
+            <span class="number" id="days">00</span>
+            <span class="label">Dias</span>
+        </div>
+        <span class="dois-ponto"> :</span>
+        <div class="time-block">
+            <span class="number" id="hours">00</span>
+            <span class="label">Horas</span>
+        </div>
+        <span class="dois-ponto"> :</span>
+        <div class="time-block">
+            <span class="number" id="minutes">00</span>
+            <span class="label">Minutos</span>
+        </div>
+        <span class="dois-ponto"> :</span>
+        <div class="time-block">
+            <span class="number" id="seconds">00</span>
+            <span class="label">Segundos</span>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <div id="msg-nao" style="display:none;">
+        <h2 style="color: #5a5a5a;">❤ Sentiremos sua falta!</h2>
+        <p>Poxa, que pena que não poderá ir. Agradecemos pelo carinho e por nos avisar!</p>
+    </div>
+    
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(typeof submitted !== 'undefined' && submitted) {finalizarRSVP()}"></iframe>
+</div>
+
+<script>
+    const urlScript = 'https://script.google.com/macros/s/AKfycbzwJo-CYYNVU8QuMoTwMS83RxBo94nvzC_SEZo5_ulT0py1ww46O892z2czqpn1zE0n/exec';
+
+    document.getElementById('meuForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        const msgDiv = document.getElementById('mensagem');
+        const status = document.getElementById('status').value;
+        
+        btn.disabled = true;
+        btn.innerText = "Enviando...";
+
+        const formData = new FormData(this);
+        
+        // Envia os dados para a planilha via POST
+        fetch(urlScript, {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(res => {
+            document.getElementById('meuForm').style.display = 'none';
+            if (status === "Sim") {
+                document.getElementById('msg-sim').style.display = 'block';
+            } else {
+                document.getElementById('msg-nao').style.display = 'block';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Erro ao enviar. Tente novamente.");
+            btn.disabled = false;
+        });
+    });
+    
+    // DEFINA A DATA DO CASAMENTO AQUI
+    const dataCasamento = new Date("Sep 19, 2026 16:00:00").getTime();
+
+    const countdown = setInterval(function() {
+        const agora = new Date().getTime();
+        const diferenca = dataCasamento - agora;
+
+        // Cálculos de tempo
+        const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+        const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+        const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+
+        // Exibe o resultado nos elementos correspondentes
+        document.getElementById("days").innerText = dias;
+        document.getElementById("hours").innerText = horas;
+        document.getElementById("minutes").innerText = minutos;
+        document.getElementById("seconds").innerText = segundos;
+
+        // Se a contagem terminar
+        if (diferenca < 0) {
+            clearInterval(countdown);
+            document.querySelector(".countdown-container").innerHTML = "<h2>É hoje! ❤️</h2>";
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>
