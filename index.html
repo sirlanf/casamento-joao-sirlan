@@ -5,7 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RSVP - Nosso Casamento</title>
     <style>
-        body { font-family: 'Georgia', serif; background-color: #fdfaf6; color: #5a5a5a; text-align: center; padding: 20px; }
+        body {
+             background-image: url('imagem/foto.jpg'); 
+            background-repeat: no-repeat;
+              /* Full height */
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+              font-family: 'Georgia', serif; 
+              background-color: #fdfaf6; 
+              background-size: 100% 170%;
+              color: #5a5a5a; 
+              text-align: center; 
+              padding: 20px; }
         .card { background: white; max-width: 500px; margin: 0 auto; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e0d5c1; }
         h2 { color: #6E8B3D; }
         .input-group { text-align: left; margin-bottom: 15px; }
@@ -45,7 +59,7 @@
         }
 
         .number {
-            font-family: 'Georgia', serif;
+            font-family: 'Perpetua', serif;
             font-size: 2rem;
             color: #4a4a4a;
         }
@@ -59,10 +73,11 @@
         }
         
         .dois-ponto {
-            font-family: 'Georgia', serif;
+            font-family: 'Perpetua', serif;
             font-size: 1.5rem;
             color: #4a4a4a;
             text-align: center;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -103,17 +118,23 @@
             <span class="number" id="days">00</span>
             <span class="label">Dias</span>
         </div>
-        <span class="dois-ponto"> :</span>
+        <div>
+        <span class="dois-ponto">:</span>
+        </div>
         <div class="time-block">
             <span class="number" id="hours">00</span>
             <span class="label">Horas</span>
         </div>
-        <span class="dois-ponto"> :</span>
+        <div>
+        <span class="dois-ponto">:</span>
+        </div>
         <div class="time-block">
             <span class="number" id="minutes">00</span>
             <span class="label">Minutos</span>
         </div>
-        <span class="dois-ponto"> :</span>
+        <div>
+        <span class="dois-ponto">:</span>
+        </div>
         <div class="time-block">
             <span class="number" id="seconds">00</span>
             <span class="label">Segundos</span>
